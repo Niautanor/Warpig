@@ -42,6 +42,16 @@ void Main::OnExit()
 	SDL_Quit();
 }
 
+void Main::OnEvent(SDL_Event* pEvent)
+{
+
+}
+
+void Main::OnMove(float fTime)
+{
+
+}
+
 void Main::OnRender()
 {
 	SDL_FillRect(pDisplay, NULL, SDL_MapRGB(pDisplay->format, 0,0,0));
@@ -56,14 +66,22 @@ int Main::OnExecute(CL_ParamList* pCL_Params)
 
 	SDL_Event Event;
 
+	Uint32 t1,t2;
+	float fTime = 0.0f;
+
 	while(Running)
 	{
+		t1 = SDL_GetTicks();
 		while(SDL_PollEvent(&Event))
 		{
 			if(Event.type == SDL_QUIT)
 				Running = false;
+			else OnEvent(&Event);
 		}
+		OnMove(fTime);
 		OnRender();
+		t2 = SDL_GetTicks();
+		fTime = (float)(t2-t1)/1000.0f;
 	}
 
 	OnExit();

@@ -26,5 +26,7 @@ public:
 
 	int OnExecute(CL_ParamList* pCL_Params);
 
+	void OnEvent(SDL_Event* pEvent);
+	void OnMove(float fTime);
 	void OnRender();
 };
