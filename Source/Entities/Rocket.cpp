@@ -57,6 +57,15 @@ void CRocket::RemoveRocket(CRocket* pRocket)
 	}
 }
 
+bool CRocket::Spawn(int MinX, int MaxX, int MinY, int MaxY, int MinV, int MaxV)
+{
+	CRocket* R = new CRocket;
+	if(!R->OnInit(rand() % (MaxX-MinX) + MinX, rand() % (MaxY-MinY) + MaxY, rand() % (MaxV-MinV) + MinV))
+		return false;
+	AddRocket(R);
+	return true;
+}
+
 CRocket::CRocket()
 {
 	X = Y = 0;

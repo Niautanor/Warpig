@@ -7,6 +7,9 @@
 
 #pragma once/* MAIN_H_ */
 
+#include <time.h>
+#include <math.h>
+
 #include "CommandLine.h"
 
 #include <SDL/SDL.h>

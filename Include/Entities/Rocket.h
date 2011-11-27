@@ -44,7 +44,7 @@ public:
 	static void AddRocket(CRocket* pRocket);
 	static void RemoveRocket(CRocket* pRocket);
 
-	//static void Spawn();
+	static bool Spawn(int MinX, int MaxX, int MinY, int MaxY, int MinV, int MaxV);
 
 	eCollisionReturn CheckCollision(CPig* pPig);
 

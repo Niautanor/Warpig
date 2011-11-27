@@ -20,6 +20,8 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	DisplayW = CheckCL_Param(pCL_Params,"Width").intvalue;
 	DisplayH = CheckCL_Param(pCL_Params,"Height").intvalue;
 
+	srand(time(NULL));
+
 	if(!DisplayW) DisplayW = 512;
 	if(!DisplayH) DisplayH = 240;
 
@@ -35,14 +37,12 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	if(!Pig.OnInit(40, 168, 55, 20, 2, 20, "PigSprite.png"))
 		return false;
 
-	CRocket* R = new CRocket;
-	if(!R->OnInit(300,-30,50))
-		return false;
-	CRocket::AddRocket(R);
-	R = new CRocket;
-	if(!R->OnInit(500, -70, 80))
-		return false;
-	CRocket::AddRocket(R);
+	CRocket::Spawn(0,240,-30,0,30,60);
+	CRocket::Spawn(0,240,-30,0,30,60);
+	CRocket::Spawn(0,240,-30,0,30,60);
+	CRocket::Spawn(0,240,-30,0,30,60);
+	CRocket::Spawn(0,240,-30,0,30,60);
+	CRocket::Spawn(0,240,-30,0,30,60);
 
 	return true;
 }
