@@ -37,12 +37,9 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	if(!Pig.OnInit(40, 168, 55, 20, 2, 20, "PigSprite.png"))
 		return false;
 
-	CRocket::Spawn(0,240,-30,0,30,60);
-	CRocket::Spawn(0,240,-30,0,30,60);
-	CRocket::Spawn(0,240,-30,0,30,60);
-	CRocket::Spawn(0,240,-30,0,30,60);
-	CRocket::Spawn(0,240,-30,0,30,60);
-	CRocket::Spawn(0,240,-30,0,30,60);
+	CRocket::Spawn(20,500,-30,0,30,60);
+	CRocket::Spawn(20,500,-30,0,30,60);
+	CRocket::Spawn(20,500,-30,0,30,60);
 
 	return true;
 }
@@ -61,6 +58,10 @@ void Main::OnExit()
 void Main::OnEvent(SDL_Event* pEvent)
 {
 	Pig.OnEvent(pEvent);
+
+	if(pEvent->type == SDL_KEYDOWN)
+		if(pEvent->key.keysym.sym == SDLK_r)
+			CRocket::Spawn(Pig.GetX() -0.25f * Pig.GetV(), Pig.GetX() + 1.5f * Pig.GetV(), -96, -48, Pig.GetV() * 0.5f, Pig.GetV() * 0.75f);
 }
 
 void Main::OnMove(float fTime)

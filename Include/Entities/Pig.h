@@ -34,6 +34,7 @@ public:
 
 	float GetX() { return X; }
 	float GetY() { return Y_Base + Y_Amplitude; }
+	float GetV() { return X_Speed; }
 
 	bool OnInit(float Start_X, float Start_Y, float X_Velocity, float Y_Velocity, float MaxYAmp, float Accl, const char* SpriteName);
 	void OnExit();

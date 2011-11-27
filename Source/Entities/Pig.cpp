@@ -62,10 +62,12 @@ void CPig::OnEvent(SDL_Event* pEvent)
 		switch(pEvent->key.keysym.sym)
 		{
 		case SDLK_a:
+			if(X_Speed < 30) break;
 			X_Speed -= Accelleration;
 			Y_Speed -= Accelleration * Y_Accl_Factor;
 			break;
 		case SDLK_d:
+			if(X_Speed > 200) break;
 			X_Speed += Accelleration;
 			Y_Speed += Accelleration * Y_Accl_Factor;
 			break;
