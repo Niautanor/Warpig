@@ -14,7 +14,8 @@
 
 #include "CSurface.h"
 
-#include "Entitys/Pig.h"
+#include "Entities/Pig.h"
+#include "Entities/Rocket.h"
 
 class Main
 {
@@ -25,6 +26,8 @@ private:
 	SDL_Surface* pBackground;
 
 	CPig Pig;
+
+	CRocket Rocket;
 
 public:
 	Main();

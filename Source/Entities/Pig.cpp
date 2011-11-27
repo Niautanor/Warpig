@@ -5,7 +5,7 @@
  *      Author: Tim
  */
 
-#include "Entitys/Pig.h"
+#include "Entities/Pig.h"
 
 CPig::CPig()
 {

@@ -35,11 +35,15 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	if(!Pig.OnInit(40, 168, 55, 20, 2, 20, "PigSprite.png"))
 		return false;
 
+	if(!Rocket.OnInit(130, -30, 45))
+		return false;
+
 	return true;
 }
 
 void Main::OnExit()
 {
+	Rocket.OnExit();
 	Pig.OnExit();
 
 	SDL_FreeSurface(pDisplay);
@@ -55,19 +59,28 @@ void Main::OnEvent(SDL_Event* pEvent)
 void Main::OnMove(float fTime)
 {
 	Pig.OnMove(fTime);
+	Rocket.OnMove(fTime);
+
+	if(Rocket.CheckCollision(&Pig))
+	{
+		Rocket.OnExit();
+	}
 }
 
 void Main::OnRender()
 {
 	SDL_FillRect(pDisplay, NULL, SDL_MapRGB(pDisplay->format, 0,0,0));
 
-	int Offset = ((int)(Pig.GetX() - 40)) % pBackground->w;
+	int Offset = (int)(Pig.GetX() - 40);
 
-	CSurface::Blit(pBackground, pDisplay, -pBackground->w - Offset, 0);
-	CSurface::Blit(pBackground, pDisplay, -Offset, 0);
-	CSurface::Blit(pBackground, pDisplay, pBackground->w - Offset, 0);
+	int BackgroundOffset = Offset % pBackground->w;
+	CSurface::Blit(pBackground, pDisplay, -pBackground->w - BackgroundOffset, 0);
+	CSurface::Blit(pBackground, pDisplay, -BackgroundOffset, 0);
+	CSurface::Blit(pBackground, pDisplay, pBackground->w - BackgroundOffset, 0);
 
-	Pig.OnRender(pDisplay, 40, Pig.GetY());
+	Pig.OnRender(pDisplay, Pig.GetX() - Offset, Pig.GetY());
+
+	Rocket.OnRender(pDisplay, Rocket.GetX() - Offset, Rocket.GetY());
 
 	SDL_Flip(pDisplay);
 }
