@@ -10,6 +10,53 @@
 std::vector<CRocket*> CRocket::RocketList;
 SDL_Surface* CRocket::pRocketSprite = NULL;
 
+int CRocket::GetRocketId(CRocket* pRocket)
+{
+	for(Uint32 i;i<RocketList.size();i++)
+	{
+		if(RocketList[i] == pRocket)
+			return i;
+	}
+	return -1;
+}
+
+int CRocket::GetNumRockets()
+{
+	int ret = 0;
+	for(Uint32 i=0;i<RocketList.size();i++)
+		if(RocketList[i])
+			ret++;
+	return ret;
+}
+
+void CRocket::AddRocket(CRocket* pRocket)
+{
+	for(Uint32 i=0;i<RocketList.size();i++)
+	{
+		if(!RocketList[i])
+		{
+			RocketList[i] = pRocket;
+			return;
+		}
+	}
+	RocketList.push_back(pRocket);
+}
+
+void CRocket::RemoveRocket(CRocket* pRocket)
+{
+	int Id = GetRocketId(pRocket);
+	if(Id == -1)
+		return;
+	RocketList[Id]->OnExit();
+	delete RocketList[Id];
+	RocketList[Id] = NULL;
+	if(GetNumRockets() == 0)
+	{
+		SDL_FreeSurface(pRocketSprite);
+		pRocketSprite = NULL;
+	}
+}
+
 CRocket::CRocket()
 {
 	X = Y = 0;
@@ -32,16 +79,18 @@ bool CRocket::OnInit(float StartX, float StartY, float Velocity)
 
 void CRocket::OnExit()
 {
-	if(RocketList.empty())
-	{
-		SDL_FreeSurface(pRocketSprite);
-		pRocketSprite = NULL;
-	}
+}
+
+void CRocket::ExitAll()
+{
+	for(Uint32 i=0;i<RocketList.size();i++)
+		if(RocketList[i])
+			RemoveRocket(RocketList[i]);
 }
 
 eCollisionReturn CRocket::CheckCollision(CPig* pPig)
 {
-	if((Y + 48) > pPig->GetY() && ((X + 48) > pPig->GetX() || X < (pPig->GetX() - 50)))
+	if((Y + 48) > pPig->GetY() && (X+48) > pPig->GetX() && X < (pPig->GetX() + 50))
 		return PIG;
 	if((Y + 48) > 208)
 		return GROUND;
@@ -54,9 +103,23 @@ void CRocket::OnMove(float fTime)
 	Y += V * fTime;
 }
 
+void CRocket::MoveAll(float fTime)
+{
+	for(Uint32 i=0;i<RocketList.size();i++)
+		if(RocketList[i])
+			RocketList[i]->OnMove(fTime);
+}
+
 void CRocket::OnRender(SDL_Surface* pDisplay, float X, float Y)
 {
 	if(!pRocketSprite)
 		return;
 	CSurface::Blit(pRocketSprite, pDisplay, X, Y);
+}
+
+void CRocket::RenderAll(SDL_Surface* pDisplay, int X_Offset)
+{
+	for(Uint32 i=0;i<RocketList.size();i++)
+		if(RocketList[i])
+			RocketList[i]->OnRender(pDisplay, RocketList[i]->GetX() - X_Offset, RocketList[i]->GetY());
 }

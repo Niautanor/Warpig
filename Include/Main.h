@@ -27,8 +27,6 @@ private:
 
 	CPig Pig;
 
-	CRocket Rocket;
-
 public:
 	Main();
 

@@ -35,15 +35,22 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	if(!Pig.OnInit(40, 168, 55, 20, 2, 20, "PigSprite.png"))
 		return false;
 
-	if(!Rocket.OnInit(130, -30, 45))
+	CRocket* R = new CRocket;
+	if(!R->OnInit(300,-30,50))
 		return false;
+	CRocket::AddRocket(R);
+	R = new CRocket;
+	if(!R->OnInit(500, -70, 80))
+		return false;
+	CRocket::AddRocket(R);
 
 	return true;
 }
 
 void Main::OnExit()
 {
-	Rocket.OnExit();
+	CRocket::ExitAll();
+
 	Pig.OnExit();
 
 	SDL_FreeSurface(pDisplay);
@@ -59,12 +66,12 @@ void Main::OnEvent(SDL_Event* pEvent)
 void Main::OnMove(float fTime)
 {
 	Pig.OnMove(fTime);
-	Rocket.OnMove(fTime);
+	CRocket::MoveAll(fTime);
 
-	if(Rocket.CheckCollision(&Pig))
-	{
-		Rocket.OnExit();
-	}
+	for(Uint32 i=0;i<CRocket::RocketList.size();i++)
+		if(CRocket::RocketList[i])
+			if(CRocket::RocketList[i]->CheckCollision(&Pig))
+				CRocket::RemoveRocket(CRocket::RocketList[i]);
 }
 
 void Main::OnRender()
@@ -80,7 +87,7 @@ void Main::OnRender()
 
 	Pig.OnRender(pDisplay, Pig.GetX() - Offset, Pig.GetY());
 
-	Rocket.OnRender(pDisplay, Rocket.GetX() - Offset, Rocket.GetY());
+	CRocket::RenderAll(pDisplay, Offset);
 
 	SDL_Flip(pDisplay);
 }

@@ -30,10 +30,6 @@ private:
 	float X,Y;
 	float V;
 
-	static std::vector<CRocket*> RocketList;
-	//static void AddRocket(CRocket* pRocket);
-	//static void RemoveRocket(CRocket* pRocket);
-
 	static SDL_Surface* pRocketSprite;
 
 public:
@@ -42,6 +38,12 @@ public:
 	float GetX() { return X; }
 	float GetY() { return Y; }
 
+	static std::vector<CRocket*> RocketList;
+	static int GetRocketId(CRocket* pRocket);
+	static int GetNumRockets();
+	static void AddRocket(CRocket* pRocket);
+	static void RemoveRocket(CRocket* pRocket);
+
 	//static void Spawn();
 
 	eCollisionReturn CheckCollision(CPig* pPig);
@@ -49,10 +51,10 @@ public:
 	bool OnInit(float StartX, float StartY, float Velocity);
 	void OnExit();
 
-	//static void RenderAll();//kapselung von OnRender()
-	//static void MoveAll();//und OnMove()
+	static void RenderAll(SDL_Surface* pDisplay, int X_Offset);//kapselung von OnRender()
+	static void MoveAll(float fTime);//und OnMove()
 
-	//static void ExitAll();//Entfernt alle Elemente von RocketList und gibt pRocketSprite Frei
+	static void ExitAll();//Entfernt alle Elemente von RocketList und gibt pRocketSprite Frei
 
 	void OnRender(SDL_Surface* pDisplay, float X, float Y);
 	void OnMove(float fTime);
