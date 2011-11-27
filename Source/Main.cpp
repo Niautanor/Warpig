@@ -32,7 +32,7 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	if((pBackground = CSurface::Load("Background.png")) == NULL)
 		return false;
 
-	if(!Pig.OnInit(40, 168, 55, 20, 2, "PigSprite.png"))
+	if(!Pig.OnInit(40, 168, 55, 20, 2, 20, "PigSprite.png"))
 		return false;
 
 	return true;
@@ -49,7 +49,7 @@ void Main::OnExit()
 
 void Main::OnEvent(SDL_Event* pEvent)
 {
-
+	Pig.OnEvent(pEvent);
 }
 
 void Main::OnMove(float fTime)
@@ -63,6 +63,7 @@ void Main::OnRender()
 
 	int Offset = ((int)(Pig.GetX() - 40)) % pBackground->w;
 
+	CSurface::Blit(pBackground, pDisplay, -pBackground->w - Offset, 0);
 	CSurface::Blit(pBackground, pDisplay, -Offset, 0);
 	CSurface::Blit(pBackground, pDisplay, pBackground->w - Offset, 0);
 

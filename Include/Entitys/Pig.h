@@ -7,6 +7,8 @@
 
 #pragma once/* PIG_H_ */
 
+#include <math.h>
+
 #include <SDL/SDL.h>
 
 #include "CSurface.h"
@@ -22,6 +24,8 @@ private:
 	bool Y_Dir;
 
 	float X_Speed, Y_Speed;
+	float Accelleration;
+	float Y_Accl_Factor;
 
 	SDL_Surface* pSprite;
 
@@ -31,7 +35,7 @@ public:
 	float GetX() { return X; }
 	float GetY() { return Y_Base + Y_Amplitude; }
 
-	bool OnInit(float Start_X, float Start_Y, float X_Velocity, float Y_Velocity, float MaxYAmp, const char* SpriteName);
+	bool OnInit(float Start_X, float Start_Y, float X_Velocity, float Y_Velocity, float MaxYAmp, float Accl, const char* SpriteName);
 	void OnExit();
 
 	void OnMove(float fTime);
