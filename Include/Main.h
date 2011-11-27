@@ -30,6 +30,9 @@ private:
 
 	CPig Pig;
 
+	float m_fTime;
+	Uint8 Difficulty;
+
 public:
 	Main();
 

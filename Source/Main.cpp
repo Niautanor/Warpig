@@ -12,6 +12,9 @@ Main::Main()
 	Running = true;
 	pDisplay = NULL;
 	pBackground = NULL;
+
+	Difficulty = 1;
+	m_fTime = 0.0f;
 }
 
 bool Main::OnInit(CL_ParamList* pCL_Params)
@@ -19,14 +22,18 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	Uint16 DisplayW, DisplayH;
 	DisplayW = CheckCL_Param(pCL_Params,"Width").intvalue;
 	DisplayH = CheckCL_Param(pCL_Params,"Height").intvalue;
+	Difficulty = CheckCL_Param(pCL_Params,"Difficulty").intvalue;
 
 	srand(time(NULL));
 
 	if(!DisplayW) DisplayW = 512;
 	if(!DisplayH) DisplayH = 240;
+	if(!Difficulty) Difficulty = 1;
 
 	if(SDL_Init(SDL_INIT_VIDEO))
 		return false;
+
+	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, 100);
 
 	if((pDisplay = SDL_SetVideoMode(DisplayW, DisplayH, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
 		return false;
@@ -58,10 +65,6 @@ void Main::OnExit()
 void Main::OnEvent(SDL_Event* pEvent)
 {
 	Pig.OnEvent(pEvent);
-
-	if(pEvent->type == SDL_KEYDOWN)
-		if(pEvent->key.keysym.sym == SDLK_r)
-			CRocket::Spawn(Pig.GetX() -0.25f * Pig.GetV(), Pig.GetX() + 1.5f * Pig.GetV(), -96, -48, Pig.GetV() * 0.5f, Pig.GetV() * 0.75f);
 }
 
 void Main::OnMove(float fTime)
@@ -73,6 +76,13 @@ void Main::OnMove(float fTime)
 		if(CRocket::RocketList[i])
 			if(CRocket::RocketList[i]->CheckCollision(&Pig))
 				CRocket::RemoveRocket(CRocket::RocketList[i]);
+
+	m_fTime += fTime;
+	if(m_fTime > 1.25f / Difficulty)
+	{
+		CRocket::Spawn(Pig.GetX() -0.25f * Pig.GetV(), Pig.GetX() + 2.0f * Pig.GetV(), -96, -48, 15 + Pig.GetV() * 0.5f, 15 + Pig.GetV() * 0.75f);
+		m_fTime -= 1.25f / Difficulty;
+	}
 }
 
 void Main::OnRender()

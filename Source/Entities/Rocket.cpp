@@ -12,7 +12,7 @@ SDL_Surface* CRocket::pRocketSprite = NULL;
 
 int CRocket::GetRocketId(CRocket* pRocket)
 {
-	for(Uint32 i;i<RocketList.size();i++)
+	for(Uint32 i=0;i<RocketList.size();i++)
 	{
 		if(RocketList[i] == pRocket)
 			return i;
