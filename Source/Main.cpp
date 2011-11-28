@@ -44,15 +44,13 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	if(!Pig.OnInit(40, 168, 55, 20, 2, 20, "PigSprite.png"))
 		return false;
 
-	CRocket::Spawn(20,500,-30,0,30,60);
-	CRocket::Spawn(20,500,-30,0,30,60);
-	CRocket::Spawn(20,500,-30,0,30,60);
-
 	return true;
 }
 
 void Main::OnExit()
 {
+	CExplosion::ExitAll();
+
 	CRocket::ExitAll();
 
 	Pig.OnExit();
@@ -69,13 +67,22 @@ void Main::OnEvent(SDL_Event* pEvent)
 
 void Main::OnMove(float fTime)
 {
+	CExplosion::MoveAll(fTime);
+	for(Uint32 i=0;i<CExplosion::ExplosionList.size();i++)
+		if(CExplosion::ExplosionList[i])
+			if(CExplosion::ExplosionList[i]->GetTimeRemaining() < 0)
+				CExplosion::RemoveExplosion(CExplosion::ExplosionList[i]);
+
 	Pig.OnMove(fTime);
 	CRocket::MoveAll(fTime);
 
 	for(Uint32 i=0;i<CRocket::RocketList.size();i++)
 		if(CRocket::RocketList[i])
 			if(CRocket::RocketList[i]->CheckCollision(&Pig))
+			{
+				CExplosion::InitExplosion(CRocket::RocketList[i]->GetX()+7,CRocket::RocketList[i]->GetY()-7,rand() % 5 + 2);
 				CRocket::RemoveRocket(CRocket::RocketList[i]);
+			}
 
 	m_fTime += fTime;
 	if(m_fTime > 1.25f / Difficulty)
@@ -99,6 +106,8 @@ void Main::OnRender()
 	Pig.OnRender(pDisplay, Pig.GetX() - Offset, Pig.GetY());
 
 	CRocket::RenderAll(pDisplay, Offset);
+
+	CExplosion::RenderAll(pDisplay, Offset);
 
 	SDL_Flip(pDisplay);
 }

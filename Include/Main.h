@@ -19,6 +19,7 @@
 
 #include "Entities/Pig.h"
 #include "Entities/Rocket.h"
+#include "Entities/Explosion.h"
 
 class Main
 {
