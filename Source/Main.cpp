@@ -41,7 +41,10 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	if((pBackground = CSurface::Load("Background.png")) == NULL)
 		return false;
 
-	if(!Pig.OnInit(40, 168, 55, 20, 2, 20, "PigSprite.png"))
+	if(!Pig.OnInit(40, 168, 55, 20, 2, 20, 5, "PigSprite.png"))
+		return false;
+
+	if(!GameOver.OnInit())
 		return false;
 
 	return true;
@@ -55,6 +58,8 @@ void Main::OnExit()
 
 	Pig.OnExit();
 
+	GameOver.OnExit();
+
 	SDL_FreeSurface(pDisplay);
 
 	SDL_Quit();
@@ -67,6 +72,9 @@ void Main::OnEvent(SDL_Event* pEvent)
 
 void Main::OnMove(float fTime)
 {
+	if(Pig.GetLife() < 0)
+		return;
+
 	CExplosion::MoveAll(fTime);
 	for(Uint32 i=0;i<CExplosion::ExplosionList.size();i++)
 		if(CExplosion::ExplosionList[i])
@@ -76,10 +84,13 @@ void Main::OnMove(float fTime)
 	Pig.OnMove(fTime);
 	CRocket::MoveAll(fTime);
 
+	eCollisionReturn Collision = NONE;
 	for(Uint32 i=0;i<CRocket::RocketList.size();i++)
 		if(CRocket::RocketList[i])
-			if(CRocket::RocketList[i]->CheckCollision(&Pig))
+			if((Collision = CRocket::RocketList[i]->CheckCollision(&Pig)) != NONE)
 			{
+				if(Collision == PIG) Pig.LoseLife();
+
 				CExplosion::InitExplosion(CRocket::RocketList[i]->GetX()+7,CRocket::RocketList[i]->GetY()-7,rand() % 5 + 2);
 				CRocket::RemoveRocket(CRocket::RocketList[i]);
 			}
@@ -96,18 +107,23 @@ void Main::OnRender()
 {
 	SDL_FillRect(pDisplay, NULL, SDL_MapRGB(pDisplay->format, 0,0,0));
 
-	int Offset = (int)(Pig.GetX() - 40);
+	if(Pig.GetLife() < 0)
+		GameOver.Render(pDisplay);
+	else
+	{
+		int Offset = (int)(Pig.GetX() - 40);
 
-	int BackgroundOffset = Offset % pBackground->w;
-	CSurface::Blit(pBackground, pDisplay, -pBackground->w - BackgroundOffset, 0);
-	CSurface::Blit(pBackground, pDisplay, -BackgroundOffset, 0);
-	CSurface::Blit(pBackground, pDisplay, pBackground->w - BackgroundOffset, 0);
+		int BackgroundOffset = Offset % pBackground->w;
+		CSurface::Blit(pBackground, pDisplay, -pBackground->w - BackgroundOffset, 0);
+		CSurface::Blit(pBackground, pDisplay, -BackgroundOffset, 0);
+		CSurface::Blit(pBackground, pDisplay, pBackground->w - BackgroundOffset, 0);
 
-	Pig.OnRender(pDisplay, Pig.GetX() - Offset, Pig.GetY());
+		Pig.OnRender(pDisplay, Pig.GetX() - Offset, Pig.GetY());
 
-	CRocket::RenderAll(pDisplay, Offset);
+		CRocket::RenderAll(pDisplay, Offset);
 
-	CExplosion::RenderAll(pDisplay, Offset);
+		CExplosion::RenderAll(pDisplay, Offset);
+	}
 
 	SDL_Flip(pDisplay);
 }

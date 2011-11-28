@@ -27,6 +27,8 @@ private:
 	float Accelleration;
 	float Y_Accl_Factor;
 
+	int Life;
+
 	SDL_Surface* pSprite;
 
 public:
@@ -35,8 +37,10 @@ public:
 	float GetX() { return X; }
 	float GetY() { return Y_Base + Y_Amplitude; }
 	float GetV() { return X_Speed; }
+	int GetLife(){ return Life; }
+	void LoseLife() { Life--; }
 
-	bool OnInit(float Start_X, float Start_Y, float X_Velocity, float Y_Velocity, float MaxYAmp, float Accl, const char* SpriteName);
+	bool OnInit(float Start_X, float Start_Y, float X_Velocity, float Y_Velocity, float MaxYAmp, float Accl, int lifes, const char* SpriteName);
 	void OnExit();
 
 	void OnMove(float fTime);

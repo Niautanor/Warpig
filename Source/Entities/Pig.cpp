@@ -16,9 +16,11 @@ CPig::CPig()
 	Y_Speed = 0;
 	Accelleration = 0;
 	Y_Dir = true;
+
+	Life = 10;
 }
 
-bool CPig::OnInit(float Start_X, float Start_Y, float X_Velocity, float Y_Velocity, float MaxYAmp, float Accl, const char* SpriteName)
+bool CPig::OnInit(float Start_X, float Start_Y, float X_Velocity, float Y_Velocity, float MaxYAmp, float Accl, int lifes, const char* SpriteName)
 {
 	X = Start_X;
 	Y_Base = Start_Y;
@@ -27,6 +29,8 @@ bool CPig::OnInit(float Start_X, float Start_Y, float X_Velocity, float Y_Veloci
 	Y_Speed = Y_Velocity;
 	Accelleration = Accl;
 	Y_Accl_Factor = Y_Speed / X_Speed;
+
+	Life = lifes;
 
 	if((pSprite = CSurface::Load(SpriteName)) == NULL)
 		return false;

@@ -20,6 +20,7 @@
 #include "Entities/Pig.h"
 #include "Entities/Rocket.h"
 #include "Entities/Explosion.h"
+#include "Entities/GameOver.h"
 
 class Main
 {
@@ -33,6 +34,8 @@ private:
 
 	float m_fTime;
 	Uint8 Difficulty;
+
+	CGameOver GameOver;
 
 public:
 	Main();
