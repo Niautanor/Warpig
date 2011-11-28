@@ -25,3 +25,11 @@ void CSurface::Blit(SDL_Surface* src, SDL_Surface* dst, Sint16 X, Sint16 Y)
 
 	SDL_BlitSurface(src, NULL, dst, &dstRC);
 }
+
+void CSurface::BlitText(SDL_Surface* dst, const char* Text, TTF_Font* pFont, Sint16 X, Sint16 Y, Uint8 R, Uint8 G, Uint8 B)
+{
+	SDL_Color C = {R,G,B};
+	SDL_Surface* pText = TTF_RenderText_Blended(pFont, Text, C);
+	CSurface::Blit(pText, dst, 0, 0);
+	SDL_FreeSurface(pText);
+}

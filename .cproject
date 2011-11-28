@@ -51,6 +51,7 @@
 									<listOptionValue builtIn="false" value="SDLmain"/>
 									<listOptionValue builtIn="false" value="SDL"/>
 									<listOptionValue builtIn="false" value="SDL_image"/>
+									<listOptionValue builtIn="false" value="SDL_ttf"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1214199559" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;C:\Program Files (x86)\SDL-devel-1.2.14-VC8\MinGW Librarys\SDL-1.2.14\lib&quot;"/>
@@ -631,6 +632,7 @@
 									<listOptionValue builtIn="false" value="SDLmain"/>
 									<listOptionValue builtIn="false" value="SDL"/>
 									<listOptionValue builtIn="false" value="SDL_image"/>
+									<listOptionValue builtIn="false" value="SDL_ttf"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1987028028" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;C:\Program Files (x86)\SDL-devel-1.2.14-VC8\MinGW Librarys\SDL-1.2.14\lib&quot;"/>

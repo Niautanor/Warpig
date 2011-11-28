@@ -8,12 +8,14 @@
 #pragma once/* MAIN_H_ */
 
 #include <time.h>
+#include <cstring>
 #include <math.h>
 
 #include "CommandLine.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
 
 #include "CSurface.h"
 
@@ -36,6 +38,8 @@ private:
 	Uint8 Difficulty;
 
 	CGameOver GameOver;
+
+	TTF_Font* pFont;
 
 public:
 	Main();

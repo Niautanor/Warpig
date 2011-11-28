@@ -12,6 +12,7 @@ Main::Main()
 	Running = true;
 	pDisplay = NULL;
 	pBackground = NULL;
+	pFont = NULL;
 
 	Difficulty = 1;
 	m_fTime = 0.0f;
@@ -33,9 +34,15 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	if(SDL_Init(SDL_INIT_VIDEO))
 		return false;
 
+	if(TTF_Init())
+		return false;
+
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, 100);
 
 	if((pDisplay = SDL_SetVideoMode(DisplayW, DisplayH, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
+		return false;
+
+	if((pFont = TTF_OpenFont("cour.ttf",24)) == NULL)
 		return false;
 
 	if((pBackground = CSurface::Load("Background.png")) == NULL)
@@ -60,6 +67,10 @@ void Main::OnExit()
 
 	GameOver.OnExit();
 
+	SDL_FreeSurface(pBackground);
+
+	TTF_CloseFont(pFont);
+
 	SDL_FreeSurface(pDisplay);
 
 	SDL_Quit();
@@ -67,7 +78,7 @@ void Main::OnExit()
 
 void Main::OnEvent(SDL_Event* pEvent)
 {
-	Pig.OnEvent(pEvent);
+	if(Pig.GetLife() >= 0) Pig.OnEvent(pEvent);
 }
 
 void Main::OnMove(float fTime)
@@ -123,6 +134,10 @@ void Main::OnRender()
 		CRocket::RenderAll(pDisplay, Offset);
 
 		CExplosion::RenderAll(pDisplay, Offset);
+
+		char Text[32] = "Lifes: ";
+		char Lifes[16];
+		CSurface::BlitText(pDisplay, strcat(Text,itoa(Pig.GetLife(), Lifes, 10)), pFont, 0, 0);
 	}
 
 	SDL_Flip(pDisplay);
