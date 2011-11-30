@@ -22,6 +22,7 @@
 #include "Entities/Pig.h"
 #include "Entities/Rocket.h"
 #include "Entities/Explosion.h"
+#include "Entities/Intro.h"
 #include "Entities/GameOver.h"
 
 class Main
@@ -34,9 +35,12 @@ private:
 
 	CPig Pig;
 
+	float Score;
+
 	float m_fTime;
 	Uint8 Difficulty;
 
+	CIntro Intro;
 	CGameOver GameOver;
 
 	TTF_Font* pFont;

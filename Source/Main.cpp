@@ -16,6 +16,8 @@ Main::Main()
 
 	Difficulty = 1;
 	m_fTime = 0.0f;
+
+	Score = 0;
 }
 
 bool Main::OnInit(CL_ParamList* pCL_Params)
@@ -51,6 +53,9 @@ bool Main::OnInit(CL_ParamList* pCL_Params)
 	if(!Pig.OnInit(40, 168, 55, 20, 2, 20, 5, "PigSprite.png"))
 		return false;
 
+	if(!Intro.OnInit())
+		return false;
+
 	if(!GameOver.OnInit())
 		return false;
 
@@ -65,6 +70,8 @@ void Main::OnExit()
 
 	Pig.OnExit();
 
+	Intro.OnExit();
+
 	GameOver.OnExit();
 
 	SDL_FreeSurface(pBackground);
@@ -78,12 +85,13 @@ void Main::OnExit()
 
 void Main::OnEvent(SDL_Event* pEvent)
 {
-	if(Pig.GetLife() >= 0) Pig.OnEvent(pEvent);
+	if(Intro.GetEnabled()) Intro.OnEvent(pEvent);
+	else if(Pig.GetLife() >= 0) Pig.OnEvent(pEvent);
 }
 
 void Main::OnMove(float fTime)
 {
-	if(Pig.GetLife() < 0)
+	if(Intro.GetEnabled() || Pig.GetLife() < 0)
 		return;
 
 	CExplosion::MoveAll(fTime);
@@ -112,14 +120,25 @@ void Main::OnMove(float fTime)
 		CRocket::Spawn(Pig.GetX() -0.25f * Pig.GetV(), Pig.GetX() + 2.0f * Pig.GetV(), -96, -48, 15 + Pig.GetV() * 0.5f, 15 + Pig.GetV() * 0.75f);
 		m_fTime -= 1.25f / Difficulty;
 	}
+
+	Score += fTime * Pig.GetV() * 0.1f;
 }
 
 void Main::OnRender()
 {
 	SDL_FillRect(pDisplay, NULL, SDL_MapRGB(pDisplay->format, 0,0,0));
 
-	if(Pig.GetLife() < 0)
+	if(Intro.GetEnabled())
+		Intro.Render(pDisplay);
+	else if(Pig.GetLife() < 0)
+	{
 		GameOver.Render(pDisplay);
+
+		char Text[64] = "Final Score: ";
+		char StrScore[48];
+		itoa((int)Score,StrScore,10);
+		CSurface::BlitText(pDisplay, strcat(Text, StrScore), pFont, 0, 0, 255, 0, 0);
+	}
 	else
 	{
 		int Offset = (int)(Pig.GetX() - 40);
@@ -135,9 +154,12 @@ void Main::OnRender()
 
 		CExplosion::RenderAll(pDisplay, Offset);
 
-		char Text[32] = "Lifes: ";
+		char Text[64] = "Lifes: ";
 		char Lifes[16];
 		CSurface::BlitText(pDisplay, strcat(Text,itoa(Pig.GetLife(), Lifes, 10)), pFont, 0, 0);
+
+		strcpy(Text, "Score: ");
+		CSurface::BlitText(pDisplay, strcat(Text, itoa((int)Score,Lifes,10)), pFont, 0, 24);
 	}
 
 	SDL_Flip(pDisplay);

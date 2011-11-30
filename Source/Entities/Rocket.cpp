@@ -99,9 +99,9 @@ void CRocket::ExitAll()
 
 eCollisionReturn CRocket::CheckCollision(CPig* pPig)
 {
-	if((Y + 48) > pPig->GetY() && (X+48) > pPig->GetX() && X < (pPig->GetX() + 50))
+	if((Y + 40) > pPig->GetY() && (X+48) > pPig->GetX() && X < (pPig->GetX() + 50))
 		return PIG;
-	if((Y + 48) > 208)
+	if((Y + 44) > 208)
 		return GROUND;
 	return NONE;
 }
